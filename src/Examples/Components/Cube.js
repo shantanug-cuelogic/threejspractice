@@ -50,7 +50,6 @@ class CubeContainer extends React.Component {
       this.renderer.render(this.scene, this.camera)
     }
     render(){
-        console.log("INNDE WIDTH ===>>", window.innerWidth)
         return(
             <div
             className="cubeContainer"
