@@ -9,6 +9,7 @@ class ExamplesContainer extends React.Component {
                 <div>
                     <Link to={"examples/cube"} > Cube Example</Link>
                     <Link to={"examples/line"} > Line Example</Link>
+                    <Link to={"examples/globe"} > Globe Example</Link>
                 </div>
             </div>
         );
