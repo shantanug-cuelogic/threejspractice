@@ -4,6 +4,7 @@ import ExampleContainer from "./ExamplesContainer";
 import Cube from "./Components/Cube";
 import Line from "./Components/Line";
 import Globe from "./Components/Globe";
+import Marker from "./Components/Marker";
 
 const index = ( {match} ) => {
     return(
@@ -11,6 +12,7 @@ const index = ( {match} ) => {
             <Route path={`${match.path}/line`} component={Line}></Route>
             <Route path={`${match.path}/cube`} component={Cube}></Route>
             <Route path={`${match.path}/globe`} component={Globe}></Route>
+            <Route path={`${match.path}/marker`} component={Marker}></Route>
             <Route path={"/"} component={ExampleContainer} ></Route>
         </Switch>
     );
