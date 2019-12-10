@@ -43,27 +43,28 @@ InfoBox.prototype.update = function () {
 };
 
 //--------------------------------
-function Marker() {
+function Marker(lat,lng, index) {
   THREE.Object3D.call(this);
 
   var radius = 0.005;
   var sphereRadius = 0.02;
-  var height = 0.2;
+  var height = 0.5;
 
   // var material = new THREE.MeshPhongMaterial({
   //   color: "#E36009"
   // });
 
   var material = new THREE.LineBasicMaterial( {
-    color: "#E36009",
+    color: 0xff6600,
     linewidth: 1,
     linecap: 'round', //ignored by WebGLRenderer
-    linejoin:  'round' //ignored by WebGLRenderer
+    linejoin:  'round' //ignored by WebGLRenderer,
+
   } );
   var cone = new THREE.Mesh(new THREE.ConeBufferGeometry(radius, height, 8, 1, true), material);
   cone.position.y = height * 0.5;
   cone.rotation.x = Math.PI;
-
+  cone.userData = {index: index, lat: lat, lng: lng}
   var sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(sphereRadius, 16, 8), material);
   sphere.position.y = height * 0.95 + sphereRadius;
 
@@ -84,8 +85,10 @@ function Earth(radius, texture, texture2) {
     new THREE.SphereBufferGeometry(radius, 64.0, 48.0),
     new THREE.MeshPhongMaterial({
       map: texture,
+      color: "#66a3ff",
       bumpMap: texture2,
-      bumpScale: 0.8
+      bumpScale: 0.2,
+      
     })
   );
 
@@ -94,8 +97,8 @@ function Earth(radius, texture, texture2) {
 var markerarry = [];
 Earth.prototype = Object.create(THREE.Object3D.prototype);
 
-Earth.prototype.createMarker = function (lat, lon) {
-  var marker = new Marker();
+Earth.prototype.createMarker = function (lat, lon, index) {
+  var marker = new Marker(lat,lon,index);
 
   var latRad = lat * (Math.PI / 180);
   var lonRad = -lon * (Math.PI / 180);
@@ -134,33 +137,66 @@ class CubeContainer extends React.Component {
     this.scene.add(directionalLight);
     var light = new THREE.AmbientLight(0x404040, 10); // soft white light
     this.scene.add(light);
-    var texture = null //new THREE.TextureLoader().load(imge);
+    var texture = new THREE.TextureLoader().load(imge);
     var texture2 = new THREE.TextureLoader().load(imge2);
 
     var controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.earth = new Earth(1.0, texture2, texture);
-    this.earth.createMarker(48.856700, 2.350800); // Paris
-    this.earth.createMarker(51.507222, -0.1275); // London
-    this.earth.createMarker(34.050000, -118.250000); // LA
-    this.earth.createMarker(41.836944, -87.684722); // Chicago
-    this.earth.createMarker(35.683333, 139.683333); // Tokyo
-    this.earth.createMarker(33.333333, 44.383333); // Baghdad
-    this.earth.createMarker(40.712700, -74.005900); // New York
+    this.earth.createMarker(48.856700, 2.350800, 1); // Paris
+    this.earth.createMarker(51.507222, -0.1275, 2); // London
+    this.earth.createMarker(34.050000, -118.250000,3); // LA
+    this.earth.createMarker(41.836944, -87.684722,4); // Chicago
+    this.earth.createMarker(35.683333, 139.683333,5); // Tokyo
+    this.earth.createMarker(33.333333, 44.383333,6); // Baghdad
+    this.earth.createMarker(40.712700, -74.005900,7); // New York
 
-    this.earth.createMarker(55.750000, 37.616667); // Moscow
-    this.earth.createMarker(35.117500, -89.971111); // Memphis
-    this.earth.createMarker(-33.925278, 18.423889); // Cape Town
-    this.earth.createMarker(32.775833, -96.796667); // Dallas
-    this.earth.createMarker(52.366667, 4.900000); // Amsterdam
-    this.earth.createMarker(42.358056, -71.063611); // Boston
-    this.earth.createMarker(52.507222, 13.145833); // Berlin
-    this.earth.createMarker(18.5204, 73.8567); // pune
+    this.earth.createMarker(55.750000, 37.616667,8); // Moscow
+    this.earth.createMarker(35.117500, -89.971111,9); // Memphis
+    this.earth.createMarker(-33.925278, 18.423889,10); // Cape Town
+    this.earth.createMarker(32.775833, -96.796667,11); // Dallas
+    this.earth.createMarker(52.366667, 4.900000,12); // Amsterdam
+    this.earth.createMarker(42.358056, -71.063611,13); // Boston
+    this.earth.createMarker(52.507222, 13.145833,14); // Berlin
+    this.earth.createMarker(18.5204, 73.8567,15); // pune
 
-    this.earth.createMarker(37.783333, -122.416667); // San Francisco
+    // this.earth.createMarker(37.783333, -122.416667); // San Francisco
     this.scene.add(this.earth)
+
+
+      //----------------
+      window.addEventListener('click', this.onmousemove)
+
     this.start()
   }
-
+  onmousemove = (event) => {
+    const rect = this.renderer.domElement.getBoundingClientRect();
+    const left = event.clientX - rect.left;
+    const top = event.clientY - rect.top;
+  
+    const x = (left / rect.width) * 2 - 1;
+    const y = - (top / rect.height) * 2 + 1;
+    
+    const raycaster = new THREE.Raycaster();
+    raycaster.ray.origin.setFromMatrixPosition(this.camera.matrixWorld);
+    raycaster.ray.direction.set(x, y, 0.5).unproject(this.camera).sub(raycaster.ray.origin).normalize();
+    
+    const intersects = raycaster.intersectObjects(this.earth.children, true);
+    if(intersects.length > 0) {
+      if(intersects[0].object.geometry.type === "ConeBufferGeometry"){
+        
+        if(!intersects[0].object.clicked){
+          intersects[0].object.material.color.setHex(0xff0000)
+          intersects[0].object.clicked = true
+        } else {
+          intersects[0].object.material.color.setHex(0xff6600)
+          intersects[0].object.clicked = false
+        }
+        const {userData} = intersects[0].object;
+        // alert(`Marker:${userData.index}  Latitude: ${userData.lat} Longitude:${userData.lng}`)
+        
+      }
+    }
+  }
   componentWillUnmount() {
     this.stop()
     this.mount.removeChild(this.renderer.domElement)
@@ -175,7 +211,7 @@ class CubeContainer extends React.Component {
   }
   animate = () => {
     this.earth.rotation.x += 0.00001
-    this.earth.rotation.y += 0.005
+    this.earth.rotation.y += 0.0009
     this.renderScene()
     this.frameId = window.requestAnimationFrame(this.animate)
   }
