@@ -61,8 +61,8 @@ class CubeContainer extends React.Component {
         cancelAnimationFrame(this.frameId)
     }
     animate = () => {
-        this.cube.rotation.x += 0.001
-        this.cube.rotation.y += 0.01
+        this.cube.rotation.x += 0.0000001
+        this.cube.rotation.y += 0.001
         this.renderScene()
         this.frameId = window.requestAnimationFrame(this.animate)
     }
