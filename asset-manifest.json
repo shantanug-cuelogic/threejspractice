@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.dfa2290e.chunk.css",
+    "main.js": "/static/js/main.46350812.chunk.js",
+    "main.js.map": "/static/js/main.46350812.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.1aa3e77d.js",
+    "runtime-main.js.map": "/static/js/runtime-main.1aa3e77d.js.map",
+    "static/js/2.e34cc853.chunk.js": "/static/js/2.e34cc853.chunk.js",
+    "static/js/2.e34cc853.chunk.js.map": "/static/js/2.e34cc853.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.68aca6d4bb659bbbdd8ac2f4df987729.js": "/precache-manifest.68aca6d4bb659bbbdd8ac2f4df987729.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.dfa2290e.chunk.css.map": "/static/css/main.dfa2290e.chunk.css.map",
+    "static/media/earth-dark.jpg": "/static/media/earth-dark.646e6417.jpg",
+    "static/media/earth-topology.png": "/static/media/earth-topology.56e5c068.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1aa3e77d.js",
+    "static/js/2.e34cc853.chunk.js",
+    "static/css/main.dfa2290e.chunk.css",
+    "static/js/main.46350812.chunk.js"
+  ]
+}
