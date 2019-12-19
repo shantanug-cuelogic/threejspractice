@@ -8,8 +8,8 @@ class ViewContainer extends React.Component {
             <div>
                 {/* <Redirect to={"/examples"} /> */}
                 <Switch>
-
                     <Route path={"/examples"} component={ExampleContainer}></Route>
+                    <Redirect from="/" to="/examples" ></Redirect>    
                 </Switch>
 
             </div>
