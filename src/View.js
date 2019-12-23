@@ -9,7 +9,7 @@ class ViewContainer extends React.Component {
                 {/* <Redirect to={"/examples"} /> */}
                 <Link to="/examples" >Go to examples</Link>
                 <Switch>
-                    <Route path={"/examples"} component={ExampleContainer}></Route>
+                    <Route path={`/examples`} component={ExampleContainer}></Route>
                     {/* <Redirect from="/" to="/examples" ></Redirect>     */}
                 </Switch>
 

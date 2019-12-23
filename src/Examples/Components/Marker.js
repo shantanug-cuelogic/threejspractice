@@ -2,6 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import imge from '../../Assets/earth-dark.jpg'
 import imge2 from '../../Assets/earth-topology.png' //earth-topology
+import randomCordinates from "random-coordinates";
 var OrbitControls = require('three-orbit-controls')(THREE)
 
 function _convertLatLonToVec3(lat, lon) {
@@ -48,7 +49,7 @@ function Marker(lat,lng, index) {
 
   var radius = 0.005;
   var sphereRadius = 0.02;
-  var height = 0.5;
+  var height = 0.1;
 
   // var material = new THREE.MeshPhongMaterial({
   //   color: "#E36009"
@@ -113,6 +114,24 @@ Earth.prototype.createMarker = function (lat, lon, index) {
 
 
 class CubeContainer extends React.Component {
+  constructor(props){
+    super(props);
+    this.data = [];
+    for( let i = 0 ; i< 15000; i++ ) {
+      let latLng = {};
+      let cordinate = randomCordinates().split(",") ;
+      latLng.lat = cordinate[0]
+      latLng.lng = cordinate[1]
+      this.data.push(latLng)
+      
+    }
+    this.state = {
+      earthRotationX: 0.00001,
+      earthRotationY: 0.009
+    }
+    
+  }
+
   componentDidMount() {
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -142,22 +161,27 @@ class CubeContainer extends React.Component {
 
     var controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.earth = new Earth(1.0, texture2, texture);
-    this.earth.createMarker(48.856700, 2.350800, 1); // Paris
-    this.earth.createMarker(51.507222, -0.1275, 2); // London
-    this.earth.createMarker(34.050000, -118.250000,3); // LA
-    this.earth.createMarker(41.836944, -87.684722,4); // Chicago
-    this.earth.createMarker(35.683333, 139.683333,5); // Tokyo
-    this.earth.createMarker(33.333333, 44.383333,6); // Baghdad
-    this.earth.createMarker(40.712700, -74.005900,7); // New York
 
-    this.earth.createMarker(55.750000, 37.616667,8); // Moscow
-    this.earth.createMarker(35.117500, -89.971111,9); // Memphis
-    this.earth.createMarker(-33.925278, 18.423889,10); // Cape Town
-    this.earth.createMarker(32.775833, -96.796667,11); // Dallas
-    this.earth.createMarker(52.366667, 4.900000,12); // Amsterdam
-    this.earth.createMarker(42.358056, -71.063611,13); // Boston
-    this.earth.createMarker(52.507222, 13.145833,14); // Berlin
-    this.earth.createMarker(18.5204, 73.8567,15); // pune
+    this.data.forEach( (element, index) => {
+      this.earth.createMarker(element.lat, element.lng, index); // Paris  
+    });
+
+    // this.earth.createMarker(48.856700, 2.350800, 1); // Paris
+    // this.earth.createMarker(51.507222, -0.1275, 2); // London
+    // this.earth.createMarker(34.050000, -118.250000,3); // LA
+    // this.earth.createMarker(41.836944, -87.684722,4); // Chicago
+    // this.earth.createMarker(35.683333, 139.683333,5); // Tokyo
+    // this.earth.createMarker(33.333333, 44.383333,6); // Baghdad
+    // this.earth.createMarker(40.712700, -74.005900,7); // New York
+
+    // this.earth.createMarker(55.750000, 37.616667,8); // Moscow
+    // this.earth.createMarker(35.117500, -89.971111,9); // Memphis
+    // this.earth.createMarker(-33.925278, 18.423889,10); // Cape Town
+    // this.earth.createMarker(32.775833, -96.796667,11); // Dallas
+    // this.earth.createMarker(52.366667, 4.900000,12); // Amsterdam
+    // this.earth.createMarker(42.358056, -71.063611,13); // Boston
+    // this.earth.createMarker(52.507222, 13.145833,14); // Berlin
+    // this.earth.createMarker(18.5204, 73.8567,15); // pune
 
     // this.earth.createMarker(37.783333, -122.416667); // San Francisco
     this.scene.add(this.earth)
@@ -209,10 +233,24 @@ class CubeContainer extends React.Component {
   stop = () => {
     cancelAnimationFrame(this.frameId)
   }
+  onMouseOver = () => {
+    this.setState({
+      earthRotationX: 0,
+      earthRotationY: 0
+    })
+  }
+  onMouseLeave = () => {
+    this.setState({
+      earthRotationX: 0.00001,
+      earthRotationY: 0.009
+    })
+  }
   animate = () => {
-    this.earth.rotation.x += 0.00001
-    this.earth.rotation.y += 0.0009
+    const { earthRotationX, earthRotationY } = this.state;
+    this.earth.rotation.x += earthRotationX
+    this.earth.rotation.y += earthRotationY
     this.renderScene()
+    
     this.frameId = window.requestAnimationFrame(this.animate)
   }
   renderScene = () => {
@@ -224,7 +262,8 @@ class CubeContainer extends React.Component {
         className="cubeContainer"
         style={{ width: window.innerWidth, height: window.innerHeight }}
         ref={(mount) => { this.mount = mount }}
-
+        onMouseOver = { this.onMouseOver }
+        onMouseLeave = {this.onMouseLeave }
       >
       </div>
     );
