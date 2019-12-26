@@ -12,6 +12,7 @@
     "react-ios-pwa-prompt": "^1.5.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
+    "react-worker-dom": "^2.0.0-alpha.6",
     "three": "^0.111.0",
     "three-orbit-controls": "^82.1.0"
   },

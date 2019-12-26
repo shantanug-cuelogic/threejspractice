@@ -47,29 +47,47 @@ InfoBox.prototype.update = function () {
 function Marker(lat,lng, index) {
   THREE.Object3D.call(this);
 
-  var radius = 0.005;
-  var sphereRadius = 0.02;
-  var height = 0.1;
+  var radius = 0.002;
+  var circleRadius = 0.003
+  var height =  Math.random() * 0.8 ;
 
   // var material = new THREE.MeshPhongMaterial({
   //   color: "#E36009"
   // });
 
-  var material = new THREE.LineBasicMaterial( {
-    color: 0xff6600,
-    linewidth: 1,
-    linecap: 'round', //ignored by WebGLRenderer
-    linejoin:  'round' //ignored by WebGLRenderer,
+  if( index % 2 == 0 ) {
 
-  } );
-  var cone = new THREE.Mesh(new THREE.ConeBufferGeometry(radius, height, 8, 1, true), material);
-  cone.position.y = height * 0.5;
-  cone.rotation.x = Math.PI;
-  cone.userData = {index: index, lat: lat, lng: lng}
-  // var sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(sphereRadius, 16, 8), material);
-  // sphere.position.y = height * 0.95 + sphereRadius;
+    var materialYellowLines = new THREE.LineBasicMaterial( {
+      color: "#F7F707",
+      linewidth: 1,
+      linecap: 'round', //ignored by WebGLRenderer
+      linejoin:  'round' //ignored by WebGLRenderer,
+  
+    } );
+  
+    var cone = new THREE.Mesh(new THREE.CylinderBufferGeometry(radius, circleRadius, 0.1, 30 ), materialYellowLines);
+    cone.position.y = -0.05//height * 0.5;
+    cone.rotation.x = Math.PI;
+    cone.userData = {index: index, lat: lat, lng: lng}
+    
 
+  } else {
+    
+  
 
+    var materialRedLines = new THREE.LineBasicMaterial( {
+      color: "#E80606",
+      linewidth: 1,
+      linecap: 'round', //ignored by WebGLRenderer
+      linejoin:  'round' //ignored by WebGLRenderer,
+  
+    } );
+    var cone = new THREE.Mesh(new THREE.CylinderBufferGeometry(radius, radius, height, 30 ), materialRedLines);
+    cone.position.y =  height * 0.5;
+    cone.rotation.x = Math.PI;
+    cone.userData = {index: index, lat: lat, lng: lng}
+  }
+  
   this.add(cone);
 }
 
@@ -85,15 +103,27 @@ function Earth(radius, texture, texture2) {
   var earth = new THREE.Mesh(
     new THREE.SphereBufferGeometry(radius, 64.0, 48.0),
     new THREE.MeshPhongMaterial({
-      map: texture,
+      map: texture2,
       color: "#66a3ff",
-      bumpMap: texture2,
-      bumpScale: 0.2,
+      bumpMap: texture,
+      bumpScale: 0.0,
+      
+    })
+  );
+
+  var earthGlow = new THREE.Mesh(
+    new THREE.SphereBufferGeometry(radius, 64.0, 48.0),
+    new THREE.MeshPhongMaterial({
+      map: texture2,
+      color: "#66a3ff",
+      bumpMap: texture,
+      bumpScale: 0.0,
       
     })
   );
 
   this.add(earth);
+  this.add(earthGlow);
 }
 var markerarry = [];
 Earth.prototype = Object.create(THREE.Object3D.prototype);
@@ -117,7 +147,7 @@ class CubeContainer extends React.Component {
   constructor(props){
     super(props);
     this.data = [];
-    for( let i = 0 ; i< 15000; i++ ) {
+    for( let i = 0 ; i< 5000; i++ ) {
       let latLng = {};
       let cordinate = randomCordinates().split(",") ;
       latLng.lat = cordinate[0]
@@ -126,8 +156,8 @@ class CubeContainer extends React.Component {
       
     }
     this.state = {
-      earthRotationX: 0.00001,
-      earthRotationY: 0.009
+      earthRotationX: 0.0000001,
+      earthRotationY: 0.001
     }
     
   }
@@ -147,13 +177,13 @@ class CubeContainer extends React.Component {
     this.camera.position.z = 4
     //ADD RENDERER
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
-    this.renderer.setClearColor('#918e8e')
+    this.renderer.setClearColor('#000000')
     this.renderer.setSize(width, height)
     this.mount.appendChild(this.renderer.domElement)
     //ADD CUBE
-    var directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-    directionalLight.position.set(1000, 500, 200)
-    this.scene.add(directionalLight);
+    // var directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+    // directionalLight.position.set(1000, 500, 200)
+    // this.scene.add(directionalLight);
     var light = new THREE.AmbientLight(0x404040, 10); // soft white light
     this.scene.add(light);
     var texture = new THREE.TextureLoader().load(imge);
@@ -181,7 +211,7 @@ class CubeContainer extends React.Component {
     // this.earth.createMarker(52.366667, 4.900000,12); // Amsterdam
     // this.earth.createMarker(42.358056, -71.063611,13); // Boston
     // this.earth.createMarker(52.507222, 13.145833,14); // Berlin
-    // this.earth.createMarker(18.5204, 73.8567,15); // pune
+    // this.earth.createMarker(18.5204, 73.8567,15, 1); // pune
 
     // this.earth.createMarker(37.783333, -122.416667); // San Francisco
     this.scene.add(this.earth)
@@ -205,18 +235,19 @@ class CubeContainer extends React.Component {
     raycaster.ray.direction.set(x, y, 0.5).unproject(this.camera).sub(raycaster.ray.origin).normalize();
     
     const intersects = raycaster.intersectObjects(this.earth.children, true);
+    console.log("INTERSECTS ===>>>", intersects)
     if(intersects.length > 0) {
-      if(intersects[0].object.geometry.type === "ConeBufferGeometry"){
+      if(intersects[0].object.geometry.type === "CylinderBufferGeometry"){
         
-        if(!intersects[0].object.clicked){
-          intersects[0].object.material.color.setHex(0xff0000)
-          intersects[0].object.clicked = true
-        } else {
-          intersects[0].object.material.color.setHex(0xff6600)
-          intersects[0].object.clicked = false
-        }
+        // if(!intersects[0].object.clicked){
+        //   intersects[0].object.material.color.setHex(0xff0000)
+        //   intersects[0].object.clicked = true
+        // } else {
+        //   intersects[0].object.material.color.setHex(0xff6600)
+        //   intersects[0].object.clicked = false
+        // }
         const {userData} = intersects[0].object;
-        // alert(`Marker:${userData.index}  Latitude: ${userData.lat} Longitude:${userData.lng}`)
+        console.log(`Marker:${userData.index}  Latitude: ${userData.lat} Longitude:${userData.lng}`)
         
       }
     }
@@ -241,8 +272,8 @@ class CubeContainer extends React.Component {
   }
   onMouseLeave = () => {
     this.setState({
-      earthRotationX: 0.00001,
-      earthRotationY: 0.009
+      earthRotationX: 0.0000001,
+      earthRotationY: 0.001
     })
   }
   animate = () => {
