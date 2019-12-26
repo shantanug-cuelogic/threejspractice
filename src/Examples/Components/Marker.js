@@ -1,9 +1,12 @@
 import React from "react";
 import * as THREE from "three";
+import WebWorker from "./workerSetup";
+import worker from "./worker.js";
 import imge from '../../Assets/earth-dark.jpg'
 import imge2 from '../../Assets/earth-topology.png' //earth-topology
 import randomCordinates from "random-coordinates";
 var OrbitControls = require('three-orbit-controls')(THREE)
+
 
 function _convertLatLonToVec3(lat, lon) {
   lat = lat * Math.PI / 180.0;
@@ -163,6 +166,8 @@ class CubeContainer extends React.Component {
   }
 
   componentDidMount() {
+    this.worker = new WebWorker(worker);
+
     const width = window.innerWidth;
     const height = window.innerHeight;
     //ADD SCENE
@@ -195,6 +200,24 @@ class CubeContainer extends React.Component {
     this.data.forEach( (element, index) => {
       this.earth.createMarker(element.lat, element.lng, index); // Paris  
     });
+    // let payload = {
+    //   data: this.data,
+    //   // THREE: THREE
+    // }
+
+    // this.worker.postMessage(payload);
+
+		// this.worker.addEventListener('message', event => {
+		// 	// this.setState({
+		// 	// 	count: event.data.length
+    //   // })
+    //   this.earth = event.data
+		// });
+
+
+    // this.data.forEach( (element, index) => {
+    //   this.earth.createMarker(element.lat, element.lng, index); // Paris  
+    // });
 
     // this.earth.createMarker(48.856700, 2.350800, 1); // Paris
     // this.earth.createMarker(51.507222, -0.1275, 2); // London
