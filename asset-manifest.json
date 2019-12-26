@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/threejspractice/static/css/main.dfa2290e.chunk.css",
-    "main.js": "/threejspractice/static/js/main.ccee97c4.chunk.js",
-    "main.js.map": "/threejspractice/static/js/main.ccee97c4.chunk.js.map",
+    "main.js": "/threejspractice/static/js/main.8ec6e17c.chunk.js",
+    "main.js.map": "/threejspractice/static/js/main.8ec6e17c.chunk.js.map",
     "runtime-main.js": "/threejspractice/static/js/runtime-main.42d0a2c5.js",
     "runtime-main.js.map": "/threejspractice/static/js/runtime-main.42d0a2c5.js.map",
     "static/js/2.9d6b65f5.chunk.js": "/threejspractice/static/js/2.9d6b65f5.chunk.js",
     "static/js/2.9d6b65f5.chunk.js.map": "/threejspractice/static/js/2.9d6b65f5.chunk.js.map",
     "index.html": "/threejspractice/index.html",
-    "precache-manifest.b3a385d00609ba039dd01cf6688aa402.js": "/threejspractice/precache-manifest.b3a385d00609ba039dd01cf6688aa402.js",
+    "precache-manifest.0333f0db4789bf87a12ac38e34fb6c04.js": "/threejspractice/precache-manifest.0333f0db4789bf87a12ac38e34fb6c04.js",
     "service-worker.js": "/threejspractice/service-worker.js",
     "static/css/main.dfa2290e.chunk.css.map": "/threejspractice/static/css/main.dfa2290e.chunk.css.map",
     "static/media/earth-dark.jpg": "/threejspractice/static/media/earth-dark.646e6417.jpg",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.42d0a2c5.js",
     "static/js/2.9d6b65f5.chunk.js",
     "static/css/main.dfa2290e.chunk.css",
-    "static/js/main.ccee97c4.chunk.js"
+    "static/js/main.8ec6e17c.chunk.js"
   ]
 }

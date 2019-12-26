@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "3b41ff6c2defe5fb00fc3de436cfe52b",
+    "revision": "f69a97999f6d851d619706346e145bea",
     "url": "/threejspractice/index.html"
   },
   {
-    "revision": "450ec30e42a25ece33c5",
+    "revision": "22f6c1ebed0c012d5cfe",
     "url": "/threejspractice/static/css/main.dfa2290e.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/threejspractice/static/js/2.9d6b65f5.chunk.js"
   },
   {
-    "revision": "450ec30e42a25ece33c5",
-    "url": "/threejspractice/static/js/main.ccee97c4.chunk.js"
+    "revision": "22f6c1ebed0c012d5cfe",
+    "url": "/threejspractice/static/js/main.8ec6e17c.chunk.js"
   },
   {
     "revision": "3a843c7cae7d8694e2e2",
