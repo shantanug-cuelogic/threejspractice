@@ -66,8 +66,8 @@ function Marker(lat,lng, index) {
   cone.position.y = height * 0.5;
   cone.rotation.x = Math.PI;
   cone.userData = {index: index, lat: lat, lng: lng}
-  var sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(sphereRadius, 16, 8), material);
-  sphere.position.y = height * 0.95 + sphereRadius;
+  // var sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(sphereRadius, 16, 8), material);
+  // sphere.position.y = height * 0.95 + sphereRadius;
 
 
   this.add(cone);

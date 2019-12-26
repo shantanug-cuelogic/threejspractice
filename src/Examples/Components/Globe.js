@@ -20,7 +20,7 @@ class CubeContainer extends React.Component {
         this.camera.position.z = 4
         //ADD RENDERER
         this.renderer = new THREE.WebGLRenderer({ antialias: false })
-        // this.renderer.setClearColor('#000000')
+        this.renderer.setClearColor('#000000')
         this.renderer.setSize(width, height)
         this.mount.appendChild(this.renderer.domElement)
         //ADD CUBE
@@ -29,16 +29,17 @@ class CubeContainer extends React.Component {
         this.scene.add(directionalLight); 
         var light = new THREE.AmbientLight( 0x404040, 5 ); // soft white light
         this.scene.add( light );
-        var texture = new THREE.TextureLoader().load(imge);
-        var texture2 = new THREE.TextureLoader().load(imge2);
+        var earthImage = new THREE.TextureLoader().load('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg');
+        var topology = new THREE.TextureLoader().load('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png');
         const geometry = new THREE.SphereGeometry(1, 50, 50);
         const material = new THREE.MeshPhongMaterial({  
             wireframe: false, 
-            map: texture, 
-            bumpMap: texture2,
-            bumpScale: 0.8
+            map: earthImage, 
+            bumpMap: topology,
+            bumpScale: 0
         
         })
+    
         this.cube = new THREE.Mesh(geometry, material)
         this.scene.add(this.cube)
         var controls = new OrbitControls( this.camera, this.renderer.domElement );
