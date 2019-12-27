@@ -1,7 +1,8 @@
+import worker from "./worker"
 export default class WebWorker {
-	constructor(worker) {
-		const code = worker.toString();
+	constructor(a) {
+		const code = a.toString();
 		const blob = new Blob(['('+code+')()']);
-		return new Worker(URL.createObjectURL(blob));
+		return new Worker(worker);
 	}
 }
