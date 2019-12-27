@@ -1,7 +1,7 @@
 import React from "react";
 import * as THREE from "three";
 import WebWorker from "./workerSetup";
-import worker from "./worker.js";
+import worker from "./worker";
 import imge from '../../Assets/earth-dark.jpg'
 import imge2 from '../../Assets/earth-topology.png' //earth-topology
 import randomCordinates from "random-coordinates";
@@ -12,10 +12,10 @@ class CubeContainer extends React.Component {
   constructor(props) {
     super(props);
     this.earthRotationX = 0.0000000
-    this.earthRotationY = 0.001
+    this.earthRotationY = 0.01
     this.data = [];
     console.log("IN constructor ===>>>", this.data.length)
-    for (let i = 0; i < 5000; i++) {
+    for (let i = 0; i < 50000; i++) {
       let latLng = {};
       let cordinate = randomCordinates().split(",");
       latLng.lat = cordinate[0]
@@ -32,11 +32,13 @@ class CubeContainer extends React.Component {
   }
 
   componentDidMount() {
-    console.log("IN DID MOUNT")
-    this.worker = new WebWorker(worker);
-
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    console.log("IN DID MOUNT", worker)
+    const code = worker.toString();
+		const blob = new Blob(['('+code+')()']);
+    this.worker = new Worker(blob);
+    this.worker.postMessage("hi")
+    const width = window.innerWidth * 0.8;
+    const height = window.innerHeight * 0.8;
     //ADD SCENE
     this.scene = new THREE.Scene()
     //ADD CAMERA
@@ -209,7 +211,6 @@ class CubeContainer extends React.Component {
     })
   }
   animate = () => {
-    console.log("IN ANIMATE")
     const { earthRotationX, earthRotationY } = this.state;
     this.group.rotation.x += earthRotationX;
     this.group.rotation.y += earthRotationY;
@@ -218,7 +219,6 @@ class CubeContainer extends React.Component {
     this.frameId = window.requestAnimationFrame(this.animate)
   }
   renderScene = () => {
-    console.log("IN RENDER SCENE")
     this.renderer.render(this.scene, this.camera)
   }
   render() {

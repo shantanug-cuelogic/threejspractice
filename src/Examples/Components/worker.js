@@ -1,6 +1,6 @@
 // importScripts('three.js')
 
-// export default () => {
+export default () => {
   
 
   self.addEventListener('message', e => { // eslint-disable-line no-restricted-globals
@@ -67,4 +67,4 @@
     // }
     postMessage("hi");
   });
-// }
+}
