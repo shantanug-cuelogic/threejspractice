@@ -55,17 +55,14 @@ onmessage = (e) => {
 
    })
 
-   function str2ab(str) {
-    var buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
-    var bufView = new Uint16Array(buf);
-    for (var i = 0, strLen = str.length; i < strLen; i++) {
-      bufView[i] = str.charCodeAt(i);
-    }
-    return buf;
-  }
+
   console.log("IN WORKER ===>>>", group2)
-  let str = str2ab( JSON.stringify(group2) )
+  let str = {
+    // shan: "Shantanu Gade",
+    Group: group2,
+    bfr: new ArrayBuffer(100)
+  }
 
 
-  postMessage(JSON.stringify(group2));
+  postMessage(group2);
   }
